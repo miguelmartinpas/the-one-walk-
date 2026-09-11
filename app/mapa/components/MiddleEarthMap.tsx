@@ -23,6 +23,19 @@ function pointsForStage(stageId: number): string {
 
 export default function MiddleEarthMap() {
   const [hovered, setHovered] = useState<Waypoint | null>(null);
+  const [pinned, setPinned] = useState<Waypoint | null>(null);
+
+  const activeWaypoint = hovered ?? pinned;
+
+  const handleMouseEnter = (w: Waypoint) => {
+    setHovered(w);
+    setPinned(null);
+  };
+  const handleMouseLeave = () => setHovered(null);
+  const handleClick = (w: Waypoint) => {
+    setPinned((current) => (current?.id === w.id ? null : w));
+    setHovered(null);
+  };
 
   return (
     <div className="w-full max-w-6xl border-4 border-zinc-800 bg-white p-2 font-mono shadow-[8px_8px_0_0_#1a1c22]">
@@ -71,9 +84,16 @@ export default function MiddleEarthMap() {
           </g>
         ))}
         {waypoints.map((w) => (
-          <WaypointMarker key={w.id} waypoint={w} onHover={setHovered} />
+          <WaypointMarker
+            key={w.id}
+            waypoint={w}
+            isActive={activeWaypoint?.id === w.id}
+            onHover={handleMouseEnter}
+            onLeave={handleMouseLeave}
+            onClick={handleClick}
+          />
         ))}
-        {hovered && <WaypointTooltip waypoint={hovered} />}
+        {activeWaypoint && <WaypointTooltip waypoint={activeWaypoint} />}
       </svg>
     </div>
   );
@@ -81,39 +101,70 @@ export default function MiddleEarthMap() {
 
 function WaypointMarker({
   waypoint,
+  isActive,
   onHover,
+  onLeave,
+  onClick,
 }: {
   waypoint: Waypoint;
-  onHover: (w: Waypoint | null) => void;
+  isActive: boolean;
+  onHover: (w: Waypoint) => void;
+  onLeave: () => void;
+  onClick: (w: Waypoint) => void;
 }) {
   const { x, y } = waypoint.coordinates;
   const radius = 22;
+  const stageColor =
+    stages.find((s) => s.id === waypoint.stage)?.color ?? "#f5e9c9";
+  const baseRadius = isActive ? radius + 6 : radius;
 
   return (
     <g
       onMouseEnter={() => onHover(waypoint)}
-      onMouseLeave={() => onHover(null)}
+      onMouseLeave={onLeave}
+      onClick={() => onClick(waypoint)}
       className="cursor-pointer"
     >
+      {isActive && (
+        <>
+          <circle
+            cx={x}
+            cy={y}
+            r={radius + 12}
+            fill={stageColor}
+            opacity={0.75}
+            filter="url(#glow)"
+          />
+          <circle
+            cx={x}
+            cy={y}
+            r={radius + 8}
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth={3}
+            opacity={0.9}
+          />
+        </>
+      )}
       <circle
         cx={x}
         cy={y}
-        r={radius + 6}
+        r={baseRadius + 6}
         fill="#000000"
         filter="url(#shadow)"
       />
       <circle
         cx={x}
         cy={y}
-        r={radius + 3}
+        r={baseRadius + 3}
         fill="#ffffff"
         filter="url(#glow)"
       />
       <circle
         cx={x}
         cy={y}
-        r={radius}
-        fill={stages.find((s) => s.id === waypoint.stage)?.color ?? "#f5e9c9"}
+        r={baseRadius}
+        fill={stageColor}
         stroke="#000000"
         strokeWidth={4}
       />
@@ -123,7 +174,6 @@ function WaypointMarker({
 
 function WaypointTooltip({ waypoint }: { waypoint: Waypoint }) {
   const stage = stages.find((s) => s.id === waypoint.stage);
-  const { x, y } = waypoint.coordinates;
 
   const prevWaypoint = waypoints.find((w) => w.id === waypoint.id && w.stage === waypoint.stage && w.distanceFromStart < waypoint.distanceFromStart)
     ?? waypoints.filter((w) => w.distanceFromStart < waypoint.distanceFromStart).pop();
@@ -135,19 +185,11 @@ function WaypointTooltip({ waypoint }: { waypoint: Waypoint }) {
 
   const tipWidth = Math.max(waypoint.name.length, eta.length, accumulated.length, fromPrev.length) * 30 + 96;
   const tipHeight = fromPrev ? 264 : 216;
-  const tipY = y - tipHeight - 96;
-  const tipX = Math.min(Math.max(x - tipWidth / 2, 8), MAP_WIDTH - tipWidth - 8);
+  const tipX = MAP_WIDTH - tipWidth - 48;
+  const tipY = 48;
 
   return (
     <g pointerEvents="none">
-      <line
-        x1={x}
-        y1={y - 48}
-        x2={x}
-        y2={y - 96}
-        stroke="#3a3224"
-        strokeWidth={12}
-      />
       <rect
         x={tipX}
         y={tipY}
