@@ -21,6 +21,19 @@ Keep this information visible throughout the session.
 
 ---
 
+## Context7 — Fresh docs before starting
+
+Before writing any code, pull up-to-date documentation for the libraries the spec touches so the implementation uses real, current APIs rather than training-data guesses.
+
+1. Identify the libraries involved (from the spec, `package.json`, and AGENTS.md — e.g. Next.js, React, Tailwind CSS).
+2. For each library, call `resolve-library-id` using the exact version present in the project.
+3. Call `query-docs` with the specific question each implementation step raises, before writing that step's code.
+4. Heed version-specific breaking changes (AGENTS.md warns that the project's Next.js 16 differs from older Next.js — APIs, middleware→proxy, async request APIs, `cacheLife`/`cacheTag`, etc.).
+
+If the `context7` MCP server is unavailable, fall back to the guides in `node_modules/next/dist/docs/` (per AGENTS.md) and keep the code aligned with the installed dependency versions.
+
+---
+
 ## Instructions
 
 Follow these phases in strict order. **Do not advance to the next phase if the previous one did not complete correctly.**

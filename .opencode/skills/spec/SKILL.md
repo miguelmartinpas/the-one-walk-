@@ -28,6 +28,10 @@ Before asking questions about the feature, make sure you have project context:
 1. Read the project memory file. Try in order and stop at the first hit: `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `README.md`.
 2. List the contents of `specs/` to see which specs already exist and how they are numbered.
 3. If previous specs exist, read at least the two most recent ones to pick up the project's conventions.
+4. **Pull fresh library docs with Context7 before asking anything.** Identify the libraries the feature will touch (from `package.json` and AGENTS.md — e.g. Next.js, React, Tailwind CSS). For each one:
+   - Call `resolve-library-id` with the library name and the version present in the project.
+   - Call `query-docs` with the question the feature poses, so the spec's data model and plan use current APIs, not training-data assumptions.
+   - Pay special attention to version-specific breaking changes (e.g. the project's Next.js 16 differs from older Next.js in many APIs).
 
 If the user has not described what they want to build, ask for an initial **single-sentence** description. If the description does not fit in one sentence, that is the first signal that the feature is too big — suggest splitting it before continuing.
 

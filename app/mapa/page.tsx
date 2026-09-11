@@ -11,7 +11,8 @@ export default function MapaPage() {
         <p className="mt-2 max-w-xl font-mono text-sm text-zinc-600 dark:text-zinc-400">
           El viaje de Frodo Bolsón por la Tierra Media, desde Bolsón Cerrado hasta
           el Monte del Destino. 2.863 km en 5 etapas. Pasa el ratón por cada
-          waypoint para ver su nombre y la distancia del tramo siguiente.
+          waypoint para ver su nombre, la distancia al siguiente punto, la distancia
+          acumulada desde el inicio y la distancia desde el punto previo.
         </p>
       </header>
       <MiddleEarthMap />
@@ -30,6 +31,17 @@ export default function MapaPage() {
           </span>
         ))}
       </section>
+      <footer className="mt-4 font-mono text-xs text-zinc-500 dark:text-zinc-400">
+        Mapa basado en{" "}
+        <a
+          href="https://github.com/k1tesurfen/mapome"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-zinc-700 dark:hover:text-zinc-200"
+        >
+          mapome (CC BY 4.0)
+        </a>
+      </footer>
     </main>
   );
 }
