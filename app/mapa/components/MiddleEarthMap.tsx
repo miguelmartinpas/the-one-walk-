@@ -184,7 +184,7 @@ function WaypointTooltip({ waypoint }: { waypoint: Waypoint }) {
   const fromPrev = waypoint.distanceFromStart === 0 ? "" : `${distanceFromPrev} km desde el punto previo`;
 
   const tipWidth = Math.max(waypoint.name.length, eta.length, accumulated.length, fromPrev.length) * 30 + 96;
-  const tipHeight = fromPrev ? 264 : 216;
+  const tipHeight = fromPrev ? 300 : 252;
   const tipX = MAP_WIDTH - tipWidth - 48;
   const tipY = 48;
 
