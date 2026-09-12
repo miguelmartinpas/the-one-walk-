@@ -99,6 +99,22 @@ export default function MiddleEarthMap() {
   );
 }
 
+function starPoints(
+  cx: number,
+  cy: number,
+  outerR: number,
+  innerR: number,
+  numPoints: number
+): string {
+  const points: string[] = [];
+  for (let i = 0; i < numPoints * 2; i++) {
+    const radius = i % 2 === 0 ? outerR : innerR;
+    const angle = (Math.PI / numPoints) * i - Math.PI / 2;
+    points.push(`${cx + radius * Math.cos(angle)},${cy + radius * Math.sin(angle)}`);
+  }
+  return points.join(" ");
+}
+
 function WaypointMarker({
   waypoint,
   isActive,
@@ -125,7 +141,7 @@ function WaypointMarker({
       onClick={() => onClick(waypoint)}
       className="cursor-pointer"
     >
-      {isActive && (
+      {isActive ? (
         <>
           <circle
             cx={x}
@@ -144,30 +160,40 @@ function WaypointMarker({
             strokeWidth={3}
             opacity={0.9}
           />
+          <polygon
+            points={starPoints(x, y, 20, 8, 5)}
+            fill={stageColor}
+            stroke="#000000"
+            strokeWidth={4}
+            strokeLinejoin="round"
+          />
+        </>
+      ) : (
+        <>
+          <circle
+            cx={x}
+            cy={y}
+            r={baseRadius + 6}
+            fill="#000000"
+            filter="url(#shadow)"
+          />
+          <circle
+            cx={x}
+            cy={y}
+            r={baseRadius + 3}
+            fill="#ffffff"
+            filter="url(#glow)"
+          />
+          <circle
+            cx={x}
+            cy={y}
+            r={baseRadius}
+            fill={stageColor}
+            stroke="#000000"
+            strokeWidth={4}
+          />
         </>
       )}
-      <circle
-        cx={x}
-        cy={y}
-        r={baseRadius + 6}
-        fill="#000000"
-        filter="url(#shadow)"
-      />
-      <circle
-        cx={x}
-        cy={y}
-        r={baseRadius + 3}
-        fill="#ffffff"
-        filter="url(#glow)"
-      />
-      <circle
-        cx={x}
-        cy={y}
-        r={baseRadius}
-        fill={stageColor}
-        stroke="#000000"
-        strokeWidth={4}
-      />
     </g>
   );
 }

@@ -1,6 +1,6 @@
 # SPEC 04 — Waypoint activo como estrella de cinco puntas
 
-> **Status:** Draft
+> **Status:** Implemented
 > **Depends on:** SPEC 03
 > **Date:** 2026-09-11
 > **Objective:** Convertir el marker del waypoint activo (hover o clic) en una estrella clásica de cinco puntas más grande (diámetro ~40), con halo de resplandor y anillo blanco, mientras los puntos no seleccionados se mantienen como círculos.
