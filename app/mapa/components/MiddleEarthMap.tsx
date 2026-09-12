@@ -38,8 +38,8 @@ export default function MiddleEarthMap() {
   };
 
   return (
-    <div className="w-full max-w-6xl border-4 border-zinc-800 bg-white p-2 font-mono shadow-[8px_8px_0_0_#1a1c22]">
-
+    <div className="w-full border-[6px] border-ink bg-parchment-deep p-1.5 font-mono shadow-[0_30px_60px_-24px_rgba(28,31,38,0.55)] sm:p-2.5">
+      <div className="border border-ink/40">
       <svg
         aria-label="Mapa de la Tierra Media"
         role="img"
@@ -95,6 +95,7 @@ export default function MiddleEarthMap() {
         ))}
         {activeWaypoint && <WaypointTooltip waypoint={activeWaypoint} />}
       </svg>
+      </div>
     </div>
   );
 }
