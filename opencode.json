@@ -1,5 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "plugin": ["opencode-code-simplifier"],
   "mcp": {
     "context7": {
       "type": "remote",
@@ -8,6 +9,16 @@
       "headers": {
         "Authorization": "Bearer {env:CONTEXT7_API_KEY}"
       }
+    },
+    "supabase": {
+      "type": "remote",
+      "url": "https://mcp.supabase.com/mcp",
+      "enabled": true
+    },
+    "playwright": {
+      "type": "local",
+      "command": ["npx", "-y", "@playwright/mcp@latest"],
+      "enabled": true
     }
   }
 }
